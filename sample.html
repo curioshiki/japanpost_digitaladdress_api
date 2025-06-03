@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>住所自動入力テスト</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 25px;
+        }
+        .set_input dt {
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        .set_input dd {
+            margin-left: 0;
+            margin-bottom: 15px;
+        }
+        .input_text {
+            display: block;
+            margin-bottom: 12px;
+        }
+        .input_text .txt {
+            display: inline-block;
+            width: 150px; /* ラベルの幅を調整 */
+            margin-right: 10px;
+            color: #333;
+            font-size: 0.9em;
+        }
+        .input_text input[type="text"] {
+            width: calc(100% - 170px); /* 入力欄の幅を調整 */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+         .input_text input[type="text"][readonly] {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+        .description {
+            font-size: 0.85em;
+            color: #666;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #e9f5ff;
+            border-left: 3px solid #007bff;
+            border-radius: 4px;
+            line-height:2em;
+        }
+        #address-api-message {
+            font-size: 0.9em;
+            margin-top: 10px;
+            padding: 8px;
+            border-radius: 4px;
+        }
+        #address-api-message:empty {
+            display: none;
+        }
+        .line_submit {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .line_submit input {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px;
+        }
+        .line_submit input[type="submit"] {
+            background-color: #007bff;
+            color: white;
+        }
+        .line_submit input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .line_submit input[type="reset"] {
+            background-color: #6c757d;
+            color: white;
+        }
+        .line_submit input[type="reset"]:hover {
+            background-color: #545b62;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>住所自動入力テスト</h1>
+        <form id="test-address-form">
+            <span class="p-country-name" style="display:none;">Japan</span>
+
+            <dl class="set_input">
+                <dt><label for="search-code-display">郵便番号・デジタルアドレス</label></dt>
+                <dd>
+                    <span class="description">郵便番号(7桁)またはデジタルアドレス(ハイフンあり/なし8桁/7桁)を入力すると、住所が自動入力されます。</span><br>
+                    <input type="text" name="search-code-display" id="search-code-display" class="dig7" placeholder="例: 1000001 または A1B-2CD3" maxlength="8">
+                </dd>
+
+                <input type="hidden" name="postal-code" class="p-postal-code">
+
+                <dt><label for="address-level1">都道府県</label></dt>
+                <dd>
+                    <input type="text" name="address-level1" id="address-level1" class="p-region" readonly>
+                </dd>
+
+                <dt><label for="address-level2">市区町村</label></dt>
+                <dd>
+                    <input type="text" name="address-level2" id="address-level2" class="p-locality" readonly>
+                </dd>
+
+                <dt><label for="address-line1">番地など</label></dt>
+                <dd>
+                    <input type="text" name="address-line1" id="address-line1" class="p-street-address p-extended-address">
+                </dd>
+
+                <dt><label for="address-line2">建物名等</label></dt>
+                <dd>
+                    <input type="text" name="address-line2" id="address-line2">
+                </dd>
+            </dl>
+            <div id="address-api-message" style="color: red; margin-top: 5px;"></div>
+
+            <div class="line_submit">
+                <input type="reset" value="クリア">
+                <input type="submit" value="送信テスト (実際には送信しません)">
+            </div>
+        </form>
+    </div>
+
+    <script src="Scripts/script_japanpost.js" defer></script>
+
+    <script>
+        // フォーム送信のテスト用 (実際には送信しない)
+        document.getElementById('test-address-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            let output = "フォームデータ:\n";
+            for (let [key, value] of formData.entries()) {
+                output += `${key}: ${value}\n`;
+            }
+            alert(output);
+            // ここで実際のフォーム送信処理を行う代わりに、内容をアラート表示します。
+        });
+    </script>
+</body>
+</html>
